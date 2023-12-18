@@ -275,7 +275,8 @@ iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 iptables -A INPUT -p icmp -m connlimit --connlimit-above 3 --connlimit-mask 0 -j DROP
 ```
 
-![Uploading image.png…]()
+![image](https://github.com/lodaogos/Jarkom-Modul-5-D28-2023/assets/115076652/5b074e8f-7d2e-4d80-a54d-b700cd708e0c)
+
 
 
 
