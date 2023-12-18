@@ -332,7 +332,7 @@ Saat hari minggu :
 
 ![image](https://github.com/lodaogos/Jarkom-Modul-5-D28-2023/assets/115076652/39a2dbf7-13fc-414f-85d2-8d8287b7839d)
 
-Kita coba ping : 
+Ketika kita coba ping akan error : 
 
 ![image](https://github.com/lodaogos/Jarkom-Modul-5-D28-2023/assets/115076652/2cb4fc2b-ab82-46a1-8623-93e59cccc103)
 
@@ -341,7 +341,7 @@ Saat hari senin jam 12.00 :
 
 ![image](https://github.com/lodaogos/Jarkom-Modul-5-D28-2023/assets/115076652/863f9942-f4af-4a53-b870-b398cc4ecbf9)
 
-Kita coba ping : 
+Ketika kita coba ping akan mendapatkan feedback : 
 
 ![image](https://github.com/lodaogos/Jarkom-Modul-5-D28-2023/assets/115076652/048acf84-7164-409d-ad1e-88ce4ce9b1c5)
 
