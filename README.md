@@ -170,5 +170,98 @@ iface eth0 inet dhcp
 ```
 
 
+No. 1
+
+Soal : 
+
+Agar topologi yang kalian buat dapat mengakses keluar, kalian diminta untuk mengkonfigurasi Aura menggunakan iptables, tetapi tidak ingin menggunakan MASQUERADE.
+
+Jawab :
+
+Agar bisa topologi bisa mengakses keluar tanpa menggunakan MASQUERADE. Kita perlu setting sebagai berikut di Aura.
+
+```
+# Get the local (private) IP address of eth0
+local_ip=$(ifconfig eth0 | grep -oP 'inet addr:\K(\S+)' | awk '{print $1}')
+
+# Add iptables rule for SNAT using the obtained local IP
+iptables -t nat -A POSTROUTING -o eth0 -s 192.205.0.0/16 -j SNAT --to-source $local_ip
+```
+
+Testing :
+
+![image](https://github.com/lodaogos/Jarkom-Modul-5-D28-2023/assets/115076652/13032dce-90af-4142-9c70-350e79696a32)
+
+
+No. 2
+
+Soal : 
+
+Kalian diminta untuk melakukan drop semua TCP dan UDP kecuali port 8080 pada TCP.
+
+Jawab : 
+
+Untuk melakukan drop semua TCP dan UDP kecuali port 8080 pada TCP, dapat kita setting sebagai berikut di Sein.
+
+```
+apt-get install netcat -y
+
+# Menghapus aturan iptables yang sudah ada
+iptables -F
+
+# Mengizinkan koneksi loopback
+iptables -A INPUT -i lo -j ACCEPT
+iptables -A OUTPUT -o lo -j ACCEPT
+
+# Mengizinkan koneksi pada port 8080 TCP
+iptables -A INPUT -p tcp --dport 8080 -j ACCEPT
+iptables -A OUTPUT -p tcp --sport 8080 -j ACCEPT
+
+# Drop Semua input selain 8080
+iptables -A INPUT -p tcp -j DROP
+iptables -A INPUT -p udp -j DROP
+
+# Menolak semua koneksi UDP
+iptables -A INPUT -p udp -j DROP
+```
+
+Kemudian kita install netcat pada GrobeForest dengan command `apt-get install netcat -y` untuk melakukan testing.
+
+Testing : 
+
+Pada Sein ketika kita uji dengan port 8080 koneksi TCP :
+
+![image](https://github.com/lodaogos/Jarkom-Modul-5-D28-2023/assets/115076652/85e4492e-7093-467d-8041-7ac43c10d829)
+
+
+Pada GrobeForest ketika kita uji dengan port 8080 koneksi TCP :
+
+![image](https://github.com/lodaogos/Jarkom-Modul-5-D28-2023/assets/115076652/59e77d60-d8a9-4847-b872-6c2cbdb3407b)
+
+Pada Sein ketika uji dengan port 8000 koneksi TCP : 
+
+![image](https://github.com/lodaogos/Jarkom-Modul-5-D28-2023/assets/115076652/8a2c1be8-3be5-43ee-8526-b760fc80103b)
+
+Pada GrobeForest ketika kita uji dengan port 8000 koneksi TCP :
+
+![image](https://github.com/lodaogos/Jarkom-Modul-5-D28-2023/assets/115076652/a9419a00-2bbf-45e2-989d-45d96e043b4e)
+
+
+Test UDP Pada Sein : 
+
+![image](https://github.com/lodaogos/Jarkom-Modul-5-D28-2023/assets/115076652/81de82aa-7b8e-4280-bc0a-8b411b17c755)
+
+Test UDP Pada GrobeForest :
+
+![image](https://github.com/lodaogos/Jarkom-Modul-5-D28-2023/assets/115076652/28050606-e263-4993-a0ed-586fde9ca84b)
+
+
+
+
+
+
+
+
+
 
 
