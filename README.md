@@ -275,7 +275,19 @@ iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 iptables -A INPUT -p icmp -m connlimit --connlimit-above 3 --connlimit-mask 0 -j DROP
 ```
 
-![image](https://github.com/lodaogos/Jarkom-Modul-5-D28-2023/assets/115076652/5b074e8f-7d2e-4d80-a54d-b700cd708e0c)
+Testing : 
+
+Testing dengan ping ke Richter.
+
+![image](https://github.com/lodaogos/Jarkom-Modul-5-D28-2023/assets/115076652/ae1f6b8e-23ab-43e3-a1d3-d398a3e48d62)
+
+Bisa dilihat pada saat kita ping menggunakan SchwerMountains, tidak didapatkan feedback dari Richter sehingga ping tersebut fail.
+
+![image](https://github.com/lodaogos/Jarkom-Modul-5-D28-2023/assets/115076652/893f5f60-997f-4a8c-b9bc-115849adf8a8)
+
+
+
+
 
 
 
