@@ -287,9 +287,61 @@ Bisa dilihat pada saat kita ping menggunakan SchwerMountains, tidak didapatkan f
 
 
 
+### No. 4
+
+Soal : 
+
+Lakukan pembatasan sehingga koneksi SSH pada Web Server hanya dapat dilakukan oleh masyarakat yang berada pada GrobeForest
+
+Jawab : 
+
+Kita bisa menggunakan rule iptable sebagai berikut di masing-masing webserver.
+
+```
+iptables -A INPUT -p tcp --dport 22 -s 192.205.4.0/22 -j ACCEPT
+iptables -A INPUT -p tcp --dport 22 -j DROP
+```
+
+Testing :
+
+Menggunakan GrobeForest
+
+![image](https://github.com/lodaogos/Jarkom-Modul-5-D28-2023/assets/115076652/fc571fe1-b01f-48a4-90fa-a73e21379f46)
+
+Menggunakan TurkRegion :
+
+![image](https://github.com/lodaogos/Jarkom-Modul-5-D28-2023/assets/115076652/55218461-a65f-448c-bd62-7d7e9a0544c8)
 
 
+### No. 5
+
+Soal : 
+
+Selain itu, akses menuju WebServer hanya diperbolehkan saat jam kerja yaitu Senin-Jumat pada pukul 08.00-16.00.
+
+Jawab : 
+
+Agar webserver hanya bisa diakses saat jam kerja, kita dapat melakukan seting sebagai berikut.
+
+```
+iptables -A INPUT -m time --timestart 08:00 --timestop 16:00 --weekdays Mon,Tue,Wed,Thu,Fri -j ACCEPT
+iptables -A INPUT -j REJECT
+```
+
+Saat hari minggu : 
+
+![image](https://github.com/lodaogos/Jarkom-Modul-5-D28-2023/assets/115076652/39a2dbf7-13fc-414f-85d2-8d8287b7839d)
+
+Kita coba ping : 
+
+![image](https://github.com/lodaogos/Jarkom-Modul-5-D28-2023/assets/115076652/2cb4fc2b-ab82-46a1-8623-93e59cccc103)
 
 
+Saat hari senin jam 12.00 : 
 
+![image](https://github.com/lodaogos/Jarkom-Modul-5-D28-2023/assets/115076652/863f9942-f4af-4a53-b870-b398cc4ecbf9)
+
+Kita coba ping : 
+
+![image](https://github.com/lodaogos/Jarkom-Modul-5-D28-2023/assets/115076652/048acf84-7164-409d-ad1e-88ce4ce9b1c5)
 
