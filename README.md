@@ -170,7 +170,7 @@ iface eth0 inet dhcp
 ```
 
 
-No. 1
+### No. 1
 
 Soal : 
 
@@ -193,7 +193,7 @@ Testing :
 ![image](https://github.com/lodaogos/Jarkom-Modul-5-D28-2023/assets/115076652/13032dce-90af-4142-9c70-350e79696a32)
 
 
-No. 2
+### No. 2
 
 Soal : 
 
@@ -257,10 +257,25 @@ Test UDP Pada GrobeForest :
 
 
 
+### No. 3
 
+Soal : 
 
+Kepala Suku North Area meminta kalian untuk membatasi DHCP dan DNS Server hanya dapat dilakukan ping oleh maksimal 3 device secara bersamaan, selebihnya akan di drop.
 
+Jawab : 
 
+Untuk dapat memenuhi permintaan tersebut kita dapat melakukan setting ip table di Revolte dan Richter sebagai berikut : 
+
+```
+# Allow connection yang sudah ada di establish
+iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+# Limit ping 3
+iptables -A INPUT -p icmp -m connlimit --connlimit-above 3 --connlimit-mask 0 -j DROP
+```
+
+![Uploading image.png…]()
 
 
 
