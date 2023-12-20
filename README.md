@@ -345,3 +345,79 @@ Ketika kita coba ping akan mendapatkan feedback :
 
 ![image](https://github.com/lodaogos/Jarkom-Modul-5-D28-2023/assets/115076652/048acf84-7164-409d-ad1e-88ce4ce9b1c5)
 
+
+### No. 6
+
+Soal :
+
+Rule bahwa akses pada hari Senin - Kamis pada jam 12.00 - 13.00 dilarang (istirahat maksi cuy) dan akses di hari Jumat pada jam 11.00 - 13.00 juga dilarang (maklum, Jumatan rek)
+
+Jawab :
+
+Mirip seperti no. 5, kita bisa menambahkan rule berikut:
+```
+iptables -A INPUT -m time --timestart 08:00 --timestop 10:59 --weekdays Fri -j ACCEPT
+iptables -A INPUT -m time --timestart 08:00 --timestop 11:59 --weekdays Mon,Tue,Wed,Thu -j ACCEPT
+iptables -A INPUT -m time --timestart 13:01 --timestop 16:00 --weekdays Mon,Tue,Wed,Thu,Fri -j ACCEPT
+iptables -A INPUT -j REJECT
+```
+
+Berikut ini testing-nya date hari Jumat jam 11:30 (jumatan).
+
+![no 6](https://github.com/lodaogos/Jarkom-Modul-5-D28-2023/assets/34641833/ed501dd9-6f35-401a-a8a8-99205ff2aeb3)
+
+![no 6 v2](https://github.com/lodaogos/Jarkom-Modul-5-D28-2023/assets/34641833/eeafbd4f-b3c8-44d4-bf78-5b06ee8f8b9b)
+
+### No. 7
+
+Soal :
+
+Karena terdapat 2 WebServer, kalian diminta agar setiap client yang mengakses Sein dengan Port 80 akan didistribusikan secara bergantian pada Sein dan Stark secara berurutan dan request dari client yang mengakses Stark dengan port 443 akan didistribusikan secara bergantian pada Sein dan Stark secara berurutan.
+
+Jawab :
+
+Untuk melakukan hal ini kita bisa melakukan prerouting. Kita bisa manipulasi paket network sehingga mengikuti yang diinginkan soal.
+
+```
+iptables -A PREROUTING -t nat -p tcp --dport 80 -d 192.205.4.2 -m statistic --mode nth --every 2 --packet 0 -j DNAT --to-destination 192.205.0.14:80
+iptables -A PREROUTING -t nat -p tcp --dport 443 -d 192.205.0.14 -m statistic --mode nth --every 2 --packet 0 -j DNAT --to-destination 192.205.4.2:443
+```
+
+### No. 8
+
+Soal : 
+
+Karena berbeda koalisi politik, maka subnet dengan masyarakat yang berada pada Revolte dilarang keras mengakses WebServer hingga masa pencoblosan pemilu kepala suku 2024 berakhir. Masa pemilu (hingga pemungutan dan penghitungan suara selesai) kepala suku bersamaan dengan masa pemilu Presiden dan Wakil Presiden Indonesia 2024.
+
+Jawab :
+
+Pada router Fern bisa ditambahkan command berikut:
+
+```
+iptables -A FORWARD -a 192.205.0.1 -d 192.205.4.2/30 -m time --weekdays Mon,Tue,Wed,Thu,Fri,Sat,Sun -j REJECT
+iptables -A FORWARD -a 192.205.0.1 -d 192.205.0.14/30 -m time --weekdays Mon,Tue,Wed,Thu,Fri,Sat,Sun -j REJECT
+```
+
+di mana 192.205.0.1 adalah Gateway dari Revolte. 192.205.4.2 IP dari Sein dan 192.205.0.14 IP dari Stark.
+
+### No. 10
+
+Soal :
+
+Karena kepala suku ingin tau paket apa saja yang di-drop, maka di setiap node server dan router ditambahkan logging paket yang di-drop dengan standard syslog level.
+
+Jawab :
+
+Pada node server tambahkan:
+```
+iptables -A INPUT -p tcp -j LOG --log-level warning --log-prefix "Dropped Packets: "
+iptables -A INPUT -p udp -j LOG --log-level warning --log-prefix "Dropped Packets: "
+```
+
+Pada router tambahkan:
+```
+iptables -A FORWARD -p tcp -j LOG --log-level warning --log-prefix "Dropped Packets: "
+iptables -A FORWARD -p udp -j LOG --log-level warning --log-prefix "Dropped Packets: "
+```
+
+Dengan command tersebut, segala paket yang lewat akan direkam.
